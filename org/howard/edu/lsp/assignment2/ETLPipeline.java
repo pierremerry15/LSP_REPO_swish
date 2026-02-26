@@ -1,4 +1,4 @@
-package LSP_REPO_swish.org.howard.edu.lsp.assignment2;
+package org.howard.edu.lsp.assignment2;
 
 import java.io.*;
 import java.math.BigDecimal;
