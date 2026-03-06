@@ -1,0 +1,77 @@
+============================================================
+ATC System Design: CRC Cards
+============================================================
+
+Assumptions (General)
+---------------------
+- Incoming transponder data includes a unique hex-code identifier for each aircraft[cite: 21].
+- The graphics refresh is managed by a system-level timer set to 10-second intervals[cite: 21].
+- "Dangerous situations" are defined by minimum separation distance and altitude thresholds[cite: 21].
+
+------------------------------------------------------------
+CRC Card 1
+------------------------------------------------------------
+Class: SignalProcessor
+Responsibilities:
+- Listens for high-density broadcast packets from aircraft transponders[cite: 7, 12].
+- Unpacks raw packet data into specific flight attributes like altitude and heading[cite: 7, 12].
+- Transmits the parsed data to the central database for storage[cite: 7, 12].
+Collaborators (if any):
+- FlightDatabase[cite: 8, 20].
+Assumptions (if any):
+- Assumes the incoming data stream follows a standardized packet format[cite: 21].
+
+------------------------------------------------------------
+CRC Card 2
+------------------------------------------------------------
+Class: FlightDatabase
+Responsibilities:
+- Stores and indexes current data for all aircraft within the sector[cite: 7, 12].
+- Updates existing records as new transponder packets arrive[cite: 7, 12].
+- Provides specific flight details in response to controller queries[cite: 7, 12].
+Collaborators (if any):
+- (None) [cite: 8, 20].
+Assumptions (if any):
+- Assumes each aircraft is uniquely identified by its transponder ID[cite: 21].
+
+------------------------------------------------------------
+CRC Card 3
+------------------------------------------------------------
+Class: ConflictAnalyzer
+Responsibilities:
+- Scans the flight database to identify potential collisions or dangerous proximity[cite: 7, 12].
+- Flags specific aircraft records that require immediate controller attention[cite: 7, 12].
+- Signals safety alerts to be rendered on the display[cite: 7, 12].
+Collaborators (if any):
+- FlightDatabase[cite: 8, 20].
+- RadarDisplay[cite: 8, 20].
+Assumptions (if any):
+- Assumes safety thresholds are updated dynamically based on airport traffic density[cite: 21].
+
+------------------------------------------------------------
+CRC Card 4
+------------------------------------------------------------
+Class: RadarDisplay
+Responsibilities:
+- Fetches the latest flight coordinates from the database every 10 seconds[cite: 7, 12].
+- Renders a graphical representation of the airspace for the controller[cite: 7, 12].
+- Highlights aircraft currently flagged by the conflict analyzer[cite: 7, 12].
+Collaborators (if any):
+- FlightDatabase[cite: 8, 20].
+- ConflictAnalyzer[cite: 8, 20].
+Assumptions (if any):
+- Assumes the hardware can handle a complete visual refresh within the 10-second window[cite: 21].
+
+------------------------------------------------------------
+CRC Card 5
+------------------------------------------------------------
+Class: ControllerTerminal
+Responsibilities:
+- Captures user input for specific aircraft detail requests[cite: 7, 12].
+- Queries the database for an aircraft's full flight history and data[cite: 7, 12].
+- Displays the query results in an accessible format for the user[cite: 7, 12].
+Collaborators (if any):
+- FlightDatabase[cite: 8, 20].
+Assumptions (if any):
+- Assumes the controller interacts via a point-and-click graphical interface[cite: 21].
+
